@@ -14,5 +14,6 @@ class BaiduItem(scrapy.Item):
     name = scrapy.Field()
     url = scrapy.Field()
     title = scrapy.Field()
-
+    img_url_list = scrapy.Field()
+    commit_img_url_list =scrapy.Field()
 

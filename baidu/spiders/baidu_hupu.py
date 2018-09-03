@@ -42,8 +42,31 @@ class BaiduHupuSpider(scrapy.Spider):
     #抓取详情页，未完工
     def detail_parse(self,response):
         if re.match(r'https://bbs.hupu.com/[0-9]*.html',response.url): # 排除分页链接，只取第一页的数据
-            jpy = PyQuery(response.text)
+            pqy = PyQuery(response.text)
             item = response.meta['item']
-            title = jpy(r'#j_data').text()
+            title = pqy(r'#j_data').text()
             item['title'] = title
+            img_list = pqy(r'#tpc table img')
+            img_len = img_list.length
+            img_url_list = []
+            for i in range(1, img_len -1): #排除头图和最后一张图
+                img_title = pqy(img_list[i])
+                url = img_title('img').attr('src')
+                if url is None:
+                    url = img_title('img').attr('data-original')
+                print(url)
+                img_url_list.append(url)
+            item['img_url_list'] = img_url_list #抓取主贴图片
+            commit_img_list = pqy(r'#readfloor table img')
+            commit_img_len = commit_img_list.length
+            #commit_img_url_list = set() 利用set去重影响最后的item格式化，先暂时用列表，不做去重
+            commit_img_url_list = []
+            for i in range(0, commit_img_len): 
+                commit_img_title = pqy(commit_img_list[i])
+                url = commit_img_title('img').attr('src')
+                if url is None:
+                    url = commit_img_title('img').attr('data-original')
+                print(url)
+                commit_img_url_list.append(url)
+            item['commit_img_url_list'] = commit_img_url_list
             return item
