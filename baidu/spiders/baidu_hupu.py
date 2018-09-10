@@ -61,7 +61,7 @@ class BaiduHupuSpider(scrapy.Spider):
             commit_img_len = commit_img_list.length
             #commit_img_url_list = set() 利用set去重影响最后的item格式化，先暂时用列表，不做去重
             commit_img_url_list = []
-            for i in range(0, commit_img_len): 
+            for i in range(0, commit_img_len):
                 commit_img_title = pqy(commit_img_list[i])
                 url = commit_img_title('img').attr('src')
                 if url is None:
